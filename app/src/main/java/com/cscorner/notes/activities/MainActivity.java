@@ -24,8 +24,10 @@ import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cscorner.notes.R;
@@ -33,6 +35,8 @@ import com.cscorner.notes.adapters.NotesAdapter;
 import com.cscorner.notes.database.NotesDatabase;
 import com.cscorner.notes.entities.Note;
 import com.cscorner.notes.listeners.NotesListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     public static final int REQUEST_CODE_SELECT_IMAGE=4;
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 5;
 
+    FirebaseAuth auth;
+    FirebaseUser user;
+    Button logout;
+    TextView textView;
+    Button timer;
     private RecyclerView notesRecyclerView;
     private Uri contentUri;
     private List<Note> noteList;
@@ -64,7 +73,24 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     REQUEST_CODE_ADD_NOTE
             );
         });
-
+        logout = findViewById(R.id.Logout);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        if (user == null)
+        {
+            Intent intent = new Intent(getApplicationContext(),Login.class);
+            startActivity(intent);
+            finish();
+        }
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(),Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

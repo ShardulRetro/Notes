@@ -106,6 +106,14 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_web_link"
             app:tint="@color/white" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_marginStart="70dp"
+            android:padding="16dp"
+            android:id="@+id/Logout"
+            />
     </LinearLayout>
 
     <ImageView
